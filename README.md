@@ -142,7 +142,7 @@ In imager.php:
 
 If any of your transform settings depends on a value from the specific Asset, you can pass a function instead of a string.
 
-The function will be passed the AssetFileModel.
+The function will be passed the Asset.
 
 As an example, this is how you would use a Focal Point field:
 
@@ -154,7 +154,7 @@ return [
             'width'       => 400,
             'height'      => 400,
             'mode'        => 'croponly',
-            'position'    => function ($asset) {
+            'position'    => function (Asset $asset) {
                 return $asset->focalPointField;
             },
         ],
