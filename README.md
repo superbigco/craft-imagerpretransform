@@ -101,6 +101,37 @@ return [
 ];
 ```
 
+You can also use a Twig template to setup your transforms:
+
+```php
+<?php
+return [
+    'transforms' => [
+        [
+            'template' => '_imager-pretransform',
+        ],
+    ]
+];
+```
+
+The Twig template will be passed the variables `asset` and `pretransform`. You can check if `pretransform` is defined if you need to conditionally do transforms in a certain way.
+
+__imager-pretransform.twig:_
+```twig
+{% set transforms = [
+    { width: 800 },
+    { width: 400, height: 400 },
+] %}
+
+{% if pretransform is defined %}
+    {% do craft.imager.transformImage(asset, transforms) %}
+{% else %}
+    {# Your normal image partial #}
+{% endif %}
+```
+
+This way you can keep your transforms in one place.
+
 You should also set Imager's cache duration to a long time, say 1 year:
 
 In imager.php:

@@ -13,6 +13,7 @@ namespace superbig\imagerpretransform\services;
 use aelvan\imager\Imager;
 use craft\base\ElementInterface;
 use craft\elements\Asset;
+use craft\web\View;
 use superbig\imagerpretransform\ImagerPretransform;
 
 use Craft;
@@ -49,7 +50,9 @@ class ImagerPretransformService extends Component
      * @param Asset $asset
      *
      * @return array|bool|null
+     * @throws \Twig_Error_Loader
      * @throws \aelvan\imager\exceptions\ImagerException
+     * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
     public function transformAsset(Asset $asset)
@@ -78,7 +81,22 @@ class ImagerPretransformService extends Component
                 unset($transforms['configOverrides']);
             }
 
-            return Imager::$plugin->imager->transformImage($asset, $transforms, $transformDefaults, $configOverrides);
+            // Get template transforms
+            $templateTransforms = array_filter($transforms, function($transform) {
+                return isset($transform['template']);
+            });
+
+            $imagerTransforms = array_filter($transforms, function($transform) {
+                return !isset($transform['template']);
+            });
+
+            if (!empty($templateTransforms)) {
+                $this->renderTransformTemplates($asset, $templateTransforms);
+            }
+
+            if (!empty($imagerTransforms)) {
+                Imager::$plugin->imager->transformImage($asset, $imagerTransforms, $transformDefaults, $configOverrides);
+            }
         }
     }
 
@@ -98,6 +116,27 @@ class ImagerPretransformService extends Component
         }, $transforms);
 
         return $transforms;
+    }
+
+    /**
+     * @param Asset $asset
+     * @param array $transforms
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \yii\base\Exception
+     */
+    public function renderTransformTemplates(Asset $asset, $transforms = [])
+    {
+        $view    = Craft::$app->getView();
+        $oldMode = $view->getTemplateMode();
+
+        $view->setTemplateMode(View::TEMPLATE_MODE_SITE);
+
+        foreach ($transforms as $transform) {
+            $view->renderTemplate($transform['template'], ['asset' => $asset, 'pretransform' => true]);
+        }
+
+        $view->setTemplateMode($oldMode);
     }
 
     public function shouldTransform(ElementInterface $element): bool
