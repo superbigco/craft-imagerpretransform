@@ -1,0 +1,40 @@
+{
+    "name": "superbig/craft-imagerpretransform",
+    "description": "Pretransform any Assets on save, with Imager",
+    "type": "craft-plugin",
+    "version": "2.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "imager pretransform"
+    ],
+    "support": {
+        "docs": "https://github.com/superbigco/craft-imagerpretransform/blob/master/README.md",
+        "issues": "https://github.com/superbigco/craft-imagerpretransform/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Superbig",
+            "homepage": "https://superbig.co"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "superbig\\imagerpretransform\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Imager Pretransform",
+        "handle": "imager-pretransform",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/superbigco/craft-imagerpretransform/master/CHANGELOG.md",
+        "class": "superbig\\imagerpretransform\\ImagerPretransform"
+    }
+}
