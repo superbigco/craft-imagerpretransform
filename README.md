@@ -136,7 +136,7 @@ return [
 There is 3 ways to pretransform images:
 - Automatically on upload
 - Manually through element action
-- imagerpretransform console command that takes either folderId or sourceHandle as argument
+- Console command that takes either folder id or volume handle as argument
 
 
 Brought to you by [Superbig](https://superbig.co)
