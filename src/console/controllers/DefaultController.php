@@ -59,6 +59,7 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+        $query  = null;
         $assets = [];
 
         if (empty($this->volume) && empty($this->folderId)) {
@@ -80,21 +81,32 @@ class DefaultController extends Controller
             }
 
             if ($volume) {
-                $assets = Asset::find()
-                               ->volume($volume)
-                               ->kind('image')
-                               ->limit(null)
-                               ->all();
+                $query = Asset::find()
+                              ->volume($volume)
+                              ->kind('image')
+                              ->limit(null);
+
+                if ($this->includeSubfolders && !$this->folderId) {
+                    $folderId = Craft::$app->getVolumes()->ensureTopFolder($volume);
+
+                    $query->folderId($folderId);
+                }
             }
         }
 
         if (!empty($this->folderId)) {
-            $assets = Asset::find()
-                           ->folderId($this->folderId)
-                           ->kind('image')
-                           ->limit(null)
-                           ->all();
+            $query = Asset::find()
+                          ->folderId($this->folderId)
+                          ->kind('image')
+                          ->limit(null);
         }
+
+        if ($this->includeSubfolders) {
+            $this->success("> Including subfolders.");
+            $query->includeSubfolders(true);
+        }
+
+        $assets = $query->all();
 
         if (empty($assets)) {
             $this->error("No assets found");
