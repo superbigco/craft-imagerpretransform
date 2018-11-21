@@ -32,6 +32,8 @@ When users upload an Asset, a task will be created, which in turn will use Image
 
 ## Configuring Imager Pretransform
 
+Copy the config template from `vendor/superbig/craft-imagerpretransform/src/config.php` to `craft/config` as `imager-pretransform.php` and make your changes there to override default settings.
+
 You can either have a set of transforms per Asset source handle:
 
 ```php
@@ -161,8 +163,6 @@ return [
     ]
 ];
 ```
-
-The configuration file should be placed in Craft's config folder (defaults to `config/`) and named imager-pretransform.php.
 
 ## Using Imager Pretransform
 
