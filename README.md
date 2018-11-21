@@ -174,10 +174,10 @@ There is 3 ways to pretransform images:
 ## Console command
 
 To transform assets in a volume:
-`./craft help imager-pretransform/default/index --volume=<volumeHandle> or -v <volumeHandle>`
+`./craft imager-pretransform/default/index --volume=<volumeHandle> or -v <volumeHandle>`
 
 To transform assets in a folder:
-`./craft help imager-pretransform/default/index --folderId=<folder id>`
+`./craft imager-pretransform/default/index --folderId=<folder id>`
 
 By default, the command will only transform the topmost folder of the volume or the specified folder by id. To include all subfolders, add the `--include-subfolders / -s` param.
 
