@@ -49,6 +49,7 @@ class DefaultController extends Controller
     {
         return [
             'v' => 'volume',
+            's' => 'includeSubfolders',
         ];
     }
 
