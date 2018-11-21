@@ -162,6 +162,8 @@ return [
 ];
 ```
 
+The configuration file should be placed in Craft's config folder (defaults to `config/`) and named imager-pretransform.php.
+
 ## Using Imager Pretransform
 
 There is 3 ways to pretransform images:
