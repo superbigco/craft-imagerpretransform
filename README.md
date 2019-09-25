@@ -39,6 +39,7 @@ You can either have a set of transforms per Asset source handle:
 ```php
 <?php
 return [
+    'enabled' => true,
     'transforms' => [
         // Images source, with handle images
         'images' => [

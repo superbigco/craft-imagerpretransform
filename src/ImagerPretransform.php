@@ -36,6 +36,7 @@ use yii\base\Event;
  * @since     2.0.0
  *
  * @property  ImagerPretransformServiceService $imagerPretransformService
+ * @method Settings getSettings()
  */
 class ImagerPretransform extends Plugin
 {
@@ -77,7 +78,8 @@ class ImagerPretransform extends Plugin
         Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $event) {
             $element = $event->element;
 
-            if (self::$plugin->imagerPretransformService->shouldTransform($element)) {
+            if (self::$plugin->getSettings()->enabled && self::$plugin->imagerPretransformService->shouldTransform($element)) {
+                /** @var Asset $element */
                 self::$plugin->imagerPretransformService->onSaveAsset($element);
             }
         });

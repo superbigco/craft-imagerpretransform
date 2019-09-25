@@ -25,6 +25,9 @@ class Settings extends Model
     // Public Properties
     // =========================================================================
 
+    /** @var bool */
+    public $enabled = true;
+
     /** @var array */
     public $transforms = [];
 

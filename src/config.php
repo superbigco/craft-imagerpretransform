@@ -23,5 +23,6 @@
  */
 
 return [
+    'enabled' => true,
     'transforms' => [],
 ];
