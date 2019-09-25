@@ -11,6 +11,7 @@
 namespace superbig\imagerpretransform\services;
 
 use aelvan\imager\Imager;
+use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\elements\Asset;
 use craft\web\View;
@@ -141,6 +142,10 @@ class ImagerPretransformService extends Component
 
     public function shouldTransform(ElementInterface $element): bool
     {
-        return $element instanceof Asset && $element->kind === 'image' && ($element->extension !== 'svg' && $element->mimeType !== 'image/svg+xml');
+        /** @var Element $element */
+        $isDraft       = ImagerPretransform::$craft32 && \craft\helpers\ElementHelper::isDraftOrRevision($element);
+        $isPropagating = ImagerPretransform::$craft32 && $element->propagating;
+
+        return !$isDraft && !$isPropagating && $element instanceof Asset && $element->kind === 'image' && ($element->extension !== 'svg' && $element->mimeType !== 'image/svg+xml');
     }
 }

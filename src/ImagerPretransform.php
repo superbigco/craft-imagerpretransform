@@ -56,6 +56,11 @@ class ImagerPretransform extends Plugin
      */
     public $schemaVersion = '2.0.0';
 
+    /**
+     * @var bool
+     */
+    public static $craft32 = false;
+
     // Public Methods
     // =========================================================================
 
@@ -74,6 +79,8 @@ class ImagerPretransform extends Plugin
         $this->setComponents([
             'imagerPretransformService' => "superbig\\imagerpretransform\\services\\ImagerPretransformService",
         ]);
+
+        self::$craft32 = version_compare(Craft::$app->getVersion(), '3.2', '>=');
 
         Event::on(Elements::class, Elements::EVENT_AFTER_SAVE_ELEMENT, function(ElementEvent $event) {
             $element = $event->element;
