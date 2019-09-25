@@ -11,7 +11,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Added Imager as a dependency
 
 ### Fixed
-- Propagating assets or assets in draft state will now be skipped 
+- Propagating assets or assets in draft state will now be skipped
+- Fixed error when you mix multiple volume handles and global transforms 
 
 ## 2.0.2 - 2018-10-22
 ### Fixed
