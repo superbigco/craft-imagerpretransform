@@ -6,8 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## Unreleased
 
-### Changed
-- Now requires Imager as a dependency
+### Added
+- Added config option to disable the plugin
+- Added Imager as a dependency
+
+### Fixed
+- Propagating assets or assets in draft state will now be skipped 
 
 ## 2.0.2 - 2018-10-22
 ### Fixed
