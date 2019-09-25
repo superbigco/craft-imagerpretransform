@@ -39,8 +39,16 @@ You can either have a set of transforms per Asset source handle:
 ```php
 <?php
 return [
+    // Toggle pretransforming as needed
     'enabled' => true,
+    // This will process each image in a separate job. Perfect in combination with Async Queue.
+    'processImagesInJobs' => false,
+    // Transforms - these options are passed straight to Imager
     'transforms' => [
+        // Global transform, will be applied to all images
+        [
+            'width' => 1400,
+        ],
         // Images source, with handle images
         'images' => [
             [

@@ -13,6 +13,7 @@ namespace superbig\imagerpretransform\services;
 use aelvan\imager\Imager;
 use craft\base\Element;
 use craft\base\ElementInterface;
+use craft\base\Volume;
 use craft\elements\Asset;
 use craft\web\View;
 use superbig\imagerpretransform\ImagerPretransform;
@@ -104,10 +105,14 @@ class ImagerPretransformService extends Component
     public function getTransforms(Asset $asset, $volumeHandle = null)
     {
         $transforms = ImagerPretransform::$plugin->getSettings()->transforms;
+        $transforms = $this->filterVolumeTransforms($transforms, $volumeHandle);
 
         // Check if there is a transform set for this specific Asset source handle
         if (!empty($transforms[ $volumeHandle ])) {
-            $transforms = $transforms[ $volumeHandle ];
+            $globalTransforms = array_filter($transforms, function($key) {
+                return \is_int($key);
+            }, \ARRAY_FILTER_USE_KEY);
+            $transforms       = array_merge($globalTransforms, $transforms[ $volumeHandle ]);
         }
 
         $transforms = array_map(function($settings) use ($asset) {
@@ -119,11 +124,24 @@ class ImagerPretransformService extends Component
         return $transforms;
     }
 
+    public function filterVolumeTransforms($transforms = [], $volumeHandle = null)
+    {
+        if ($volumeHandle) {
+            return \array_filter($transforms, function($transform, $key) use ($volumeHandle) {
+                return \is_int($key) || $key === $volumeHandle;
+            }, \ARRAY_FILTER_USE_BOTH);
+        }
+
+        return $transforms;
+    }
+
     /**
      * @param Asset $asset
      * @param array $transforms
      *
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      * @throws \yii\base\Exception
      */
     public function renderTransformTemplates(Asset $asset, $transforms = [])
