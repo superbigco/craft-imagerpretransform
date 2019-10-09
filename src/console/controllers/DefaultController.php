@@ -106,6 +106,12 @@ class DefaultController extends Controller
             $this->success("> Including subfolders.");
             $query->includeSubfolders(true);
         }
+        
+        if (!$query) {
+            $this->error("No volume found with this handle.");
+
+            return ExitCode::USAGE;
+        }
 
         $assets = $query->all();
 
