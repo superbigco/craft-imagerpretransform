@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Fixed
 - Propagating assets or assets in draft state will now be skipped
 - Fixed error when you mix multiple volume handles and global transforms 
+- Fixed error when non-existing volume handle was passed to console command ([#19](https://github.com/superbigco/craft-imagerpretransform/issues/19))
 
 ## 2.0.2 - 2018-10-22
 ### Fixed

@@ -10,6 +10,7 @@
 
 namespace superbig\imagerpretransform\console\controllers;
 
+use craft\base\Volume;
 use craft\elements\Asset;
 use superbig\imagerpretransform\ImagerPretransform;
 
@@ -57,24 +58,39 @@ class DefaultController extends Controller
      * Pretransform images by Volume/Folder
      *
      * @return mixed
+     * @throws \Twig_Error_Loader
+     * @throws \aelvan\imager\exceptions\ImagerException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex()
     {
-        $query  = null;
-        $assets = [];
+        $query               = null;
+        $volumeHandle        = trim($this->volume);
+        $volumeSpecified     = !empty($volumeHandle);
+        $volumes             = Craft::$app->getVolumes()->getAllVolumes();
+        $volumeHandles       = \array_map(function($volume) {
+            /** @var Volume $volume */
+            return $volume->handle;
+        }, $volumes);
 
-        if (empty($this->volume) && empty($this->folderId)) {
+        if ($volumeSpecified && !\in_array($volumeHandle, $volumeHandles)) {
+            $this->error("No volumes with handle {$volumeHandle} exists");
+
+            return ExitCode::NOINPUT;
+        }
+
+        if (!$volumeSpecified && empty($this->folderId)) {
             $this->error("No source handle or folderId was specified");
 
             return ExitCode::NOINPUT;
         }
 
-        if (!empty($this->volume)) {
-            $volumes = Craft::$app->getVolumes()->getAllVolumes();
-            $volume  = null;
+        if ($volumeSpecified) {
+            $volume = null;
 
             foreach ($volumes as $volumeCheck) {
-                if ($volumeCheck->handle === $this->volume) {
+                if ($volumeCheck->handle === $volumeHandle) {
                     $volume = $volumeCheck;
 
                     break;
