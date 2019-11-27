@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 2.0.3 - 2019-11-27
 
 ### Added
 - Added config option to disable the plugin
+- Added config option to process each image in a separate job. This is perfect with Async Queue.
 - Added Imager as a dependency
 
 ### Fixed

@@ -23,6 +23,7 @@
  */
 
 return [
-    'enabled' => true,
-    'transforms' => [],
+    'enabled'             => true,
+    'processImagesInJobs' => false,
+    'transforms'          => [],
 ];

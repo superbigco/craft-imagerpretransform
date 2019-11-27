@@ -28,6 +28,9 @@ class Settings extends Model
     /** @var bool */
     public $enabled = true;
 
+    /** @var bool */
+    public $processImagesInJobs = false;
+
     /** @var array */
     public $transforms = [];
 

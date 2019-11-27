@@ -22,13 +22,13 @@ use craft\queue\BaseJob;
  * @package   ImagerPretransform
  * @since     2.0.0
  */
-class PretransformImagesJob extends BaseJob
+class PretransformImageJob extends BaseJob
 {
     // Public Properties
     // =========================================================================
 
-    /** @var array */
-    public $assetIds;
+    /** @var int */
+    public $assetId;
 
     // Public Methods
     // =========================================================================
@@ -45,21 +45,14 @@ class PretransformImagesJob extends BaseJob
      */
     public function execute($queue): bool
     {
-        $totalSteps  = \count($this->assetIds);
-        $currentStep = 0;
+        $assetId = $this->assetId;
+        $asset   = Asset::findOne($assetId);
 
-        foreach ($this->assetIds as $assetId) {
-            $asset = Asset::findOne($assetId);
-
-            $currentStep++;
-            $this->setProgress($queue, $currentStep / $totalSteps);
-
-            if (!$asset) {
-                throw new ElementNotFoundException("Couldn't find Asset #{$assetId}");
-            }
-
-            ImagerPretransform::$plugin->imagerPretransformService->transformAsset($asset);
+        if (!$asset) {
+            throw new ElementNotFoundException("Couldn't find Asset #{$assetId}");
         }
+
+        ImagerPretransform::$plugin->imagerPretransformService->transformAsset($asset);
 
         return true;
     }
@@ -70,6 +63,6 @@ class PretransformImagesJob extends BaseJob
     /** @inheritdoc */
     protected function defaultDescription(): string
     {
-        return Craft::t('imager-pretransform', 'Pretransforming images');
+        return Craft::t('imager-pretransform', 'Pretransforming image');
     }
 }

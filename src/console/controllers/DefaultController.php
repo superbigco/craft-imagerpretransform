@@ -15,6 +15,7 @@ use craft\elements\Asset;
 use superbig\imagerpretransform\ImagerPretransform;
 
 use Craft;
+use superbig\imagerpretransform\jobs\PretransformImageJob;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\Console;
@@ -68,6 +69,7 @@ class DefaultController extends Controller
         $query               = null;
         $volumeHandle        = trim($this->volume);
         $volumeSpecified     = !empty($volumeHandle);
+        $processImagesInJobs = ImagerPretransform::$plugin->getSettings()->processImagesInJobs;
         $volumes             = Craft::$app->getVolumes()->getAllVolumes();
         $volumeHandles       = \array_map(function($volume) {
             /** @var Volume $volume */
@@ -131,8 +133,9 @@ class DefaultController extends Controller
             return ExitCode::OK;
         }
 
-        $total   = count($assets);
-        $current = 0;
+        $queueService = Craft::$app->getQueue();
+        $total        = count($assets);
+        $current      = 0;
 
         $this->success("> Processing {$total} images.");
 
@@ -143,12 +146,25 @@ class DefaultController extends Controller
 
             Console::updateProgress($current, $total);
 
-            ImagerPretransform::$plugin->imagerPretransformService->transformAsset($asset);
+            if ($processImagesInJobs) {
+                $imageJob = new PretransformImageJob(['assetId' => $asset->id]);
+
+                $queueService->push($imageJob);
+            }
+            else {
+                ImagerPretransform::$plugin->imagerPretransformService->transformAsset($asset);
+            }
         }
 
         Console::endProgress();
 
-        $this->success("> Done.");
+        if ($processImagesInJobs) {
+            $this->success("> Done adding jobs to queue. Each image will be processed in their own job.");
+        }
+        else {
+            $this->success("> Done.");
+        }
+
 
         return ExitCode::OK;
     }
