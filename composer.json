@@ -2,7 +2,7 @@
     "name": "superbig/craft-imagerpretransform",
     "description": "Pretransform any Assets on save, with Imager",
     "type": "craft-plugin",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "keywords": [
         "craft",
         "cms",
