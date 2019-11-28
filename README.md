@@ -155,7 +155,7 @@ If any of your transform settings depends on a value from the specific Asset, yo
 
 The function will be passed the Asset.
 
-As an example, this is how you would use a Focal Point field:
+As an example, this is how you would use the built-in focal point selector in Craft:
 
 ```php
 <?php
@@ -166,7 +166,7 @@ return [
             'height'      => 400,
             'mode'        => 'croponly',
             'position'    => function (Asset $asset) {
-                return $asset->focalPointField;
+                return $asset->getFocalPoint();
             },
         ],
     ]
